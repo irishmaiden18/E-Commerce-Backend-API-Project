@@ -96,5 +96,31 @@ const updateProduct = async (productId, productData) => {
     }
 }
 
+// a function that deletes a product based on a productId
+const deleteProduct = async (productId) => {
+
+    try {
+
+        // find the product by id then delete it
+        const productToDelete = await Product.findByIdAndDelete(productId)
+
+        // check whether the product to delete is in the database
+        // if the productToDelete was not found in the database
+        if (!productToDelete) {
+
+            // throw an error
+            throw Error ("Product was NOT found in the database!")
+        }
+
+        // if the productToDelete was found in the database, return it
+        return productToDelete
+        
+    } catch (error) {
+        
+        // propogate the error to the router file
+        throw error
+    }
+}
+
 // export the controller functions
-module.exports = { createProduct, getProducts, getProductById, updateProduct }
+module.exports = { createProduct, getProducts, getProductById, updateProduct, deleteProduct }

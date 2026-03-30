@@ -1,9 +1,11 @@
 // import express
 const express = require("express")
-const { getProducts, getProductById, createProduct, updateProduct } = require("../controllers/products-controller")
 
 // set up router
 const router = express.Router()
+
+// import controller functionality
+const { getProducts, getProductById, createProduct, updateProduct, deleteProduct } = require("../controllers/products-controller")
 
 // handle GET (read) requests to /api/v1/products
 router.get("/", async (req, res) => {
@@ -99,6 +101,30 @@ router.put("/:id", async (req, res) => {
             payload: error.message
         })
         
+    }
+})
+
+// handle DELETE requests to /api/v1/products/:id
+router.delete("/:id", async (req, res) => {
+
+    try {
+
+        // call the deleteProduct controller function
+        const productToDelete = await deleteProduct(req.params.id)
+
+        // send a success response to the user
+        res.json ({
+            message: "success",
+            payload: `${productToDelete.name} has been successfully removed from the database!`
+        })
+        
+    } catch (error) {
+        
+        // send a failure response to the user
+        res.status(404). json ({
+            message: "failure",
+            payload: error.message
+        })
     }
 })
 
