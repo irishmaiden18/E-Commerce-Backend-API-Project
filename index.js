@@ -21,7 +21,9 @@ app.use(express.json())
 // connect to MongoDB
 const connectToMongoDB = require("./database/connectToMongoDB")
 
-
+// import and use the customer router
+const customersRouter = require("./routes/customers-router")
+app.use("/api/v1/customers", customersRouter)
 
 // set up the port
 const PORT = 3000
@@ -34,5 +36,5 @@ app.listen(PORT, () => {
 
     // call the connectToMongoDB function
     connectToMongoDB()
-    
+
 })
