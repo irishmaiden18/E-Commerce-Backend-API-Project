@@ -29,6 +29,10 @@ app.use("/api/v1/customers", customersRouter)
 const productsRouter = require("./routes/products-router")
 app.use("/api/v1/products", productsRouter)
 
+// import and use the shopping cart router
+const shoppingCartRouter = require("./routes/shopping-cart-router")
+app.use("/api/v1/shoppingCarts", shoppingCartRouter)
+
 // set up the port
 const PORT = 3000
 

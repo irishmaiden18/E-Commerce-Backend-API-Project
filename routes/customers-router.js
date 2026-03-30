@@ -121,7 +121,7 @@ router.delete("/:id", async (req, res) => {
             message: "success",
             payload: `${deletedCustomer.name} has been successfully removed from the database!`
         })
-        
+
     } catch (error) {
         
         // send a failure response to the user
@@ -134,6 +134,3 @@ router.delete("/:id", async (req, res) => {
 
 // export the router
 module.exports = router
-
-
-//3pm status update
