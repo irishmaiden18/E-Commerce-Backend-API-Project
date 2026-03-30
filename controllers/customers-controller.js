@@ -76,7 +76,7 @@ const updateCustomer = async (customerId, customerData) => {
         const customerToUpdate = await Customer.findByIdAndUpdate(
             customerId,
             customerData,
-            {new: truncate}
+            {new: true}
         )
 
         // check that the customer to update is in the database

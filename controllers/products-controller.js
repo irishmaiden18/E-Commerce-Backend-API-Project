@@ -66,5 +66,35 @@ const createProduct = async (productData) => {
     }
 }
 
+// a function that updates a product based on a productId and product data
+const updateProduct = async (productId, productData) => {
+
+    try {
+
+        // find the product by productId and then update it with the productData
+        const productToUpdate = await Product.findByIdAndUpdate(
+            productId,
+            productData,
+            {new: true}
+        )
+
+        // check whether the product to update is in the database
+        // if the product was NOT found
+        if (!productToUpdate) {
+
+            // throw an error
+            throw Error("Product NOT found in the database!")
+        }
+
+        // if the product was in the database, return the updated product
+        return productToUpdate
+        
+    } catch (error) {
+        
+        // propogate the error to the router file
+        throw error
+    }
+}
+
 // export the controller functions
-module.exports = { createProduct, getProducts, getProductById }
+module.exports = { createProduct, getProducts, getProductById, updateProduct }

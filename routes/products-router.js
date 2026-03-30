@@ -1,6 +1,6 @@
 // import express
 const express = require("express")
-const { getProducts, getProductById, createProduct } = require("../controllers/products-controller")
+const { getProducts, getProductById, createProduct, updateProduct } = require("../controllers/products-controller")
 
 // set up router
 const router = express.Router()
@@ -74,6 +74,31 @@ router.post("/", async (req, res) => {
             message: "failure",
             payload: error.message
         }) 
+    }
+})
+
+// handle PUT (update) requests to /api/v1/products/:id
+router.put("/:id", async (req, res) => {
+
+    try {
+
+        // call the updateProduct controller function
+        const updatedProduct = await updateProduct(req.params.id, req.body)
+
+        // send a success response to the user
+        res.json ({
+            message: "success",
+            payload: updatedProduct
+        })
+        
+    } catch (error) {
+
+        // send a failure response to the user
+        res.status(404).json ({
+            message: "failure",
+            payload: error.message
+        })
+        
     }
 })
 
