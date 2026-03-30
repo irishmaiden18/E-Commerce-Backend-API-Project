@@ -5,7 +5,10 @@ const express = require("express")
 const router = express.Router()
 
 // import controller functionality
-const { createCustomer, getCustomers, getCustomerById } = require("../controllers/customers-controller")
+const { createCustomer, getCustomers, getCustomerById, updateCustomer } = require("../controllers/customers-controller")
+
+// import customer model
+const Customer = require("../models/customers-model")
 
 // handle GET (read) requests to /api/v1/customers
 router.get("/", async (req, res) => {
@@ -80,5 +83,33 @@ router.post("/", async (req, res) => {
 
 })
 
+// handle PUT (update) requests to /api/v1/customers/:id
+router.put("/:id", async (req, res) => {
+
+    try {
+
+        // call the updateCustomer controller function
+        const updatedUser = await updateCustomer(req.params.id, req.body)
+
+        // send a success response to the user
+        res.json ({
+            message: "success",
+            payload: updatedUser
+        })
+        
+    } catch (error) {
+
+        // send a failure response to the user
+        res.status(404).json ({
+            message: "failure",
+            payload: error.message
+        })
+        
+    }
+})
+
 // export the router
 module.exports = router
+
+
+//3pm status update

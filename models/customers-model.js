@@ -18,7 +18,10 @@ const customerSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        phone: String
+        phone: {
+            type: String,
+            default: ""
+        }
     },
     {
         timestamps: true

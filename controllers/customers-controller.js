@@ -1,4 +1,5 @@
 // import the Customers mdoel
+const { truncate } = require("fs")
 const Customer = require("../models/customers-model")
 
 // a function that will return all the customers
@@ -66,5 +67,36 @@ const createCustomer = async (customerData) => {
     }
 }
 
+// a function that will take in customerData and update an existing data entry based on that data
+const updateCustomer = async (customerId, customerData) => {
+
+    try {
+
+        // find the user by id and then update with given data
+        const customerToUpdate = await Customer.findByIdAndUpdate(
+            customerId,
+            customerData,
+            {new: truncate}
+        )
+
+        // check that the customer to update is in the database
+        // if the customer was not found
+        if (!customerToUpdate) {
+
+            // throw an error
+            throw Error("Customer NOT found in the datatbase!")
+        }
+
+        // return the updated customer
+        return customerToUpdate
+        
+    } catch (error) {
+
+        // propogate the error to the router file
+        throw error
+        
+    }
+}
+
 // export the controller functions
-module.exports = { createCustomer, getCustomers, getCustomerById}
+module.exports = { createCustomer, getCustomers, getCustomerById, updateCustomer}
