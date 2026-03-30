@@ -5,7 +5,7 @@ const express = require("express")
 const router = express.Router()
 
 // import controller functionality
-const { createCustomer, getCustomers, getCustomerById, updateCustomer } = require("../controllers/customers-controller")
+const { createCustomer, getCustomers, getCustomerById, updateCustomer, deleteCustomer } = require("../controllers/customers-controller")
 
 // import customer model
 const Customer = require("../models/customers-model")
@@ -105,6 +105,30 @@ router.put("/:id", async (req, res) => {
             payload: error.message
         })
         
+    }
+})
+
+// handle DELETE requests to /api/v1/customers/:id
+router.delete("/:id", async (req, res) => {
+
+    try {
+        
+        // call the deleteCustomer controller function
+        const deletedCustomer = await deleteCustomer(req.params.id)
+
+        // send a success response to the user
+        res.json ({
+            message: "success",
+            payload: `${deletedCustomer.name} has been successfully removed from the database!`
+        })
+        
+    } catch (error) {
+        
+        // send a failure response to the user
+        res.status(404).json ({
+            message: "failure",
+            payload: error.message
+        })
     }
 })
 

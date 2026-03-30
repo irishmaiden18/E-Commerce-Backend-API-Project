@@ -98,5 +98,32 @@ const updateCustomer = async (customerId, customerData) => {
     }
 }
 
+// a function that will delete a customer from the database given an id
+const deleteCustomer = async (customerId) => {
+
+    try {
+
+        // find the user by id then delete them
+        const customerToDelete = await Customer.findByIdAndDelete(customerId)
+
+        // make sure the customer exists in the database
+        // if customerToDelete is NOT found
+        if (!customerToDelete) {
+
+            // throw an error
+            throw Error ("Customer NOT found in the database!")
+        }
+
+        // if the customer was found in the database:
+        // return the customerToDelete
+        return customerToDelete
+        
+    } catch (error) {
+        
+        // propogate the error to the router file
+        throw error
+    }
+}
+
 // export the controller functions
-module.exports = { createCustomer, getCustomers, getCustomerById, updateCustomer}
+module.exports = { createCustomer, getCustomers, getCustomerById, updateCustomer, deleteCustomer }
