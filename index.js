@@ -25,6 +25,10 @@ const connectToMongoDB = require("./database/connectToMongoDB")
 const customersRouter = require("./routes/customers-router")
 app.use("/api/v1/customers", customersRouter)
 
+// import and use the product router
+const productsRouter = require("./routes/products-router")
+app.use("/api/v1/products", productsRouter)
+
 // set up the port
 const PORT = 3000
 
