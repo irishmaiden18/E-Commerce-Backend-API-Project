@@ -1,8 +1,8 @@
-// import the Product model
-const Product = require("../models/products-model")
-
 // import the ShoppingCart model
 const ShoppingCart = require("../models/shopping-cart-model")
+
+// import the Product model
+const Product = require("../models/products-model")
 
 // import the Product controller
 const { getProductById } = require("../controllers/products-controller")
