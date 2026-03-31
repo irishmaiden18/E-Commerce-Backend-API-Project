@@ -54,10 +54,17 @@ const getProducts = async (queryData) => {
             $lte: queryData.maxPrice || Infinity
         }
 
+        // sorting
+        // object that will keep track of all our sort queries
+        const sortObject = {}
 
+        // add sort data to our sort query object regardeless of whether there is sort query data, using defaults
+        // sortObject[queryData.sortBy || name] evaluates queryData.sortBy first then takes that property, if it doesn't exist, it fills in name
+        // queryData.sortOrder || "asc" takes in sortOrder query data, but if it doesn't exist it sorts by ascending
+        sortObject[queryData.sortBy || "name"] = queryData.sortOrder || "asc"
 
-        // get a list of all the products filtered on the properties of the filterObject, if there are no properties we get them all
-        const products = await Product.find(filterObject)
+        // get a list of all the products filtered on the properties of the filterObject, and sorted by the properties of the sortObject, if there are no properties we get them all
+        const products = await Product.find(filterObject).sort(sortObject)
 
         // return the list
         return products
