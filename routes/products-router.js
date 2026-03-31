@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
     try {
 
         // call the getProducts controller function
-        const products = await getProducts()
+        const products = await getProducts(req.query)
 
         // send a success response to the user
         res.json ({

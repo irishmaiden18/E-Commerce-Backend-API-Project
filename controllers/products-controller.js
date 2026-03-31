@@ -2,7 +2,7 @@
 const Product = require("../models/products-model")
 
 // a function that gets a list of products
-const getProducts = async () => {
+const getProducts = async (queryData) => {
 
     try {
         
@@ -12,10 +12,52 @@ const getProducts = async () => {
         // filter based on category
         // check whether the category query data exists
         // if it does
-        
+        if (queryData.category) {
 
-        // get a list of all the products
-        const products = await Product.find()
+            // add it to our filterObject
+            filterObject.category = queryData.category
+        }
+
+        // filter based on in-stock status
+        // check whether the in-stock query data exists
+        // if it does
+        if (queryData.stock) {
+
+            // determine what the query data is
+            // if the query data is "out-of-stock"
+            if (queryData.stock === "out-of-stock") {
+
+                // add to our filter object stock = equal to zero (which is out of stock)
+                filterObject.stock = {
+                    $eq: 0
+                }
+            
+            // if the query data is anything else, but it DOES exist
+            } else {
+
+                // add to our filter object stock = greater than or equal to 1 (which is in stock)
+                filterObject.stock = {
+                    $gte: 1
+                }
+            }
+        }
+
+        // filter based on price range
+        // get everything between minPrice and maxPrice
+        // add a price range to our query object regardless of whether there is query data
+        filterObject.price = {
+
+            // if minPrice exists, add greater than or equal to queryData.minPrice, if it doesn't exist use a minPrice of zero
+            $gte: queryData.minPrice || 0,
+
+            // and if maxPrice exists, add less than or equal to queryData.maxPrice, if it doesn't exist use maxPrice of Infinity
+            $lte: queryData.maxPrice || Infinity
+        }
+
+
+
+        // get a list of all the products filtered on the properties of the filterObject, if there are no properties we get them all
+        const products = await Product.find(filterObject)
 
         // return the list
         return products
