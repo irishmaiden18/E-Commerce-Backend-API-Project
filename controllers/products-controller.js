@@ -6,6 +6,14 @@ const getProducts = async () => {
 
     try {
         
+        // object that will keep track of all our filter queries
+        const filterObject = {}
+
+        // filter based on category
+        // check whether the category query data exists
+        // if it does
+        
+
         // get a list of all the products
         const products = await Product.find()
 

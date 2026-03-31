@@ -5,7 +5,7 @@ const express = require("express")
 const router = express.Router()
 
 // import controller functionality
-const { addItemToCart, createShoppingCart } = require("../controllers/shopping-cart-controller")
+const { addItemToCart, createShoppingCart, removeItemFromCart } = require("../controllers/shopping-cart-controller")
 
 // handle POST (create) requests to /api/v1/shoppingCarts
 router.post("/", async (req, res) => {
@@ -31,17 +31,43 @@ router.post("/", async (req, res) => {
     }
 })
 
-// handle PUT (update) requests to /api/v1/shoppingCarts/:id
-router.put("/:id", async (req, res) => {
+// handle PUT (addItem) requests to /api/v1/shoppingCarts/:id
+router.put("/addItem/:id", async (req, res) => {
 
     try {
 
-        // call the addItemToCart controller function
+        // call the addItemToCart controller function, taking in the shoppingCart Id as req.params.id
         const updatedCart = await addItemToCart(req.params.id, req.body)
 
         // send a success response to the user
         res.json ({
             message: "success",
+            payload: updatedCart
+        })
+        
+    } catch (error) {
+
+        // send a failure response to the user
+        res.status(500).json ({
+            message: "failure",
+            payload: error.message
+        })
+        
+    }
+})
+
+//handle PUT (removeItem) requests to /api/v1/shoppingCarts/:id
+router.put("/removeItem/:id", async (req, res) => {
+
+    try {
+
+        // call the removeItemFromCart controller function
+        const updatedCart = await removeItemFromCart(req.params.id, req.body)
+
+        // send a success response to the user
+        res.json ({
+            message: "success",
+            messageDetail: `${req.body.items} has been successfully removed from the database!`,
             payload: updatedCart
         })
         
