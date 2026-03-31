@@ -13,8 +13,8 @@ const getShoppingCartById = async (shoppingCartId) => {
     try {
 
         // make sure the shoppingCartId is in the database
-        // find the shopping cart by the given id and populate the items array with the actual objects
-        const foundShoppingCart = await ShoppingCart.findById(shoppingCartId).populate("items")
+        // find the shopping cart by the given id and populate the items array and customer field with the actual objects
+        const foundShoppingCart = await ShoppingCart.findById(shoppingCartId).populate(["items", "customer"])
 
         // if the shopping cart was NOT found in our database
         if (!foundShoppingCart) {
@@ -68,7 +68,7 @@ const createShoppingCart = async (shoppingCartData) => {
     } catch (error) {
         
         // propogate the error to the router file
-        throw Error("Error creating shopping cart")
+        throw error
     }
 }
 
@@ -198,10 +198,6 @@ const clearShoppingCart = async (shoppingCartId) => {
             {$set: {items: []}},
             {new: true}
         )
-        // const updatedShoppingCart = await ShoppingCart.updateOne (
-        //     {shoppingCartId},
-        //     {$set: {items: []}}
-        // )
 
         // return the updated shoppingCart
         return updatedShoppingCart
