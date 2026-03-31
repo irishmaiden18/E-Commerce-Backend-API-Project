@@ -5,7 +5,7 @@ const express = require("express")
 const router = express.Router()
 
 // import controller functionality
-const { addItemToCart, createShoppingCart, removeItemFromCart } = require("../controllers/shopping-cart-controller")
+const { addItemToCart, createShoppingCart, removeItemFromCart, clearShoppingCart } = require("../controllers/shopping-cart-controller")
 
 // handle POST (create) requests to /api/v1/shoppingCarts
 router.post("/", async (req, res) => {
@@ -31,7 +31,7 @@ router.post("/", async (req, res) => {
     }
 })
 
-// handle PUT (addItem) requests to /api/v1/shoppingCarts/:id
+// handle PUT (addItem) requests to /api/v1/shoppingCarts/addItem/:id
 router.put("/addItem/:id", async (req, res) => {
 
     try {
@@ -56,7 +56,7 @@ router.put("/addItem/:id", async (req, res) => {
     }
 })
 
-//handle PUT (removeItem) requests to /api/v1/shoppingCarts/:id
+//handle PUT (removeItem) requests to /api/v1/shoppingCarts/removeItem/:id
 router.put("/removeItem/:id", async (req, res) => {
 
     try {
@@ -80,6 +80,32 @@ router.put("/removeItem/:id", async (req, res) => {
         })
         
     }
+})
+
+//handle PUT (clearCart) requests to /api/v1/shoppingCarts/clearCart/:id
+router.put("/clearCart/:id", async (req, res) => {
+
+    try {
+
+        // call the clearShoppingCart controller function
+        const updatedShoppingCart = await clearShoppingCart(req.params.id)
+
+        // send a success response to the user
+        res.json ({
+            message: "success",
+            payload: updatedShoppingCart
+        })
+        
+    } catch (error) {
+
+        // send a failure response to the user
+        res.status(500).json ({
+            message: "failure",
+            payload: error.message
+        })
+        
+    }
+
 })
 
 // export the router

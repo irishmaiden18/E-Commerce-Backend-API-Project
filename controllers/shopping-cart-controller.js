@@ -126,6 +126,46 @@ const removeItemFromCart = async (shoppingCartId, productId) => {
     }
 }
 
+// a function that finds a shopping cart and then updates the customer's shopping cart to remove all products from the cart
+const clearShoppingCart = async (shoppingCartId) => {
+
+    try {
+
+        // make sure the shoppingCartId is in the database
+        // find the shopping cart by the given id
+        const foundShoppingCart = await ShoppingCart.findById(shoppingCartId)
+
+        // if the shopping cart was NOT found in our database
+        if (!foundShoppingCart) {
+
+            // throw an error
+            throw Error("Shopping Cart ID NOT found in database!")
+        }
+
+        // find shopping cart by id and update it to clear the item array
+        const updatedShoppingCart = await ShoppingCart.findByIdAndUpdate(
+            shoppingCartId,
+            {$set: {items: []}},
+            {new: true}
+        )
+        // const updatedShoppingCart = await ShoppingCart.updateOne (
+        //     {shoppingCartId},
+        //     {$set: {items: []}}
+        // )
+
+        // return the updated shoppingCart
+        return updatedShoppingCart
+        
+    } catch (error) {
+        
+        // propogate the error to the router file
+        throw error
+    }
+    
+
+
+}
+
 
 // export controller functions
-module.exports = { addItemToCart, createShoppingCart, removeItemFromCart }
+module.exports = { addItemToCart, createShoppingCart, removeItemFromCart, clearShoppingCart }
