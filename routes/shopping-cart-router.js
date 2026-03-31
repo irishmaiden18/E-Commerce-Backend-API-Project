@@ -5,7 +5,31 @@ const express = require("express")
 const router = express.Router()
 
 // import controller functionality
-const { addItemToCart, createShoppingCart, removeItemFromCart, clearShoppingCart } = require("../controllers/shopping-cart-controller")
+const { addItemToCart, createShoppingCart, removeItemFromCart, clearShoppingCart, getShoppingCartById } = require("../controllers/shopping-cart-controller")
+
+// handle GET (read) requests to /api/v1/shoppingCarts/:id
+router.get("/:id", async (req, res) => {
+
+    try {
+
+        // call the getShoppingCartById controller function
+        const foundShoppingCart = await getShoppingCartById(req.params.id)
+
+        // send a success response to the user with the foundShoppingCart
+        res.json ({
+            message: "success",
+            payload: foundShoppingCart
+        })
+        
+    } catch (error) {
+        
+        // send a failure response to the user
+        res.status(500).json ({
+            message: "failure",
+            payload: error.message
+        })
+    }
+})
 
 // handle POST (create) requests to /api/v1/shoppingCarts
 router.post("/", async (req, res) => {

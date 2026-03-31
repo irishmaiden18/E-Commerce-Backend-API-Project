@@ -4,6 +4,56 @@ const Product = require("../models/products-model")
 // import the ShoppingCart model
 const ShoppingCart = require("../models/shopping-cart-model")
 
+// import the Product controller
+const { getProductById } = require("../controllers/products-controller")
+
+// a function that will get the shopping cart data by id, list all the items in the cart and include a total price
+const getShoppingCartById = async (shoppingCartId) => {
+
+    try {
+
+        // make sure the shoppingCartId is in the database
+        // find the shopping cart by the given id and populate the items array with the actual objects
+        const foundShoppingCart = await ShoppingCart.findById(shoppingCartId).populate("items")
+
+        // if the shopping cart was NOT found in our database
+        if (!foundShoppingCart) {
+
+            // throw an error
+            throw Error("Shopping Cart ID NOT found in database!")
+        }
+
+        // calculate the total price of the items in the shopping cart
+        // start with a totalPrice of 0
+        let totalPrice = 0
+
+        // go through all the items in the shopping cart
+        for (let i = 0; i < foundShoppingCart.items.length; i++) {
+
+            // find the product in the database by it's objectId
+            const foundProduct = await getProductById(foundShoppingCart.items[i])
+
+            // add the price of the product to the total price
+            totalPrice += foundProduct.price
+        }
+
+        // change foundShoppingCart from a MongoDB object to a regular object
+        let updatedShoppingCart = foundShoppingCart.toObject()
+
+        // add the totalPrice property and assign it to the totalPrice calculated above
+        updatedShoppingCart.totalPrice = totalPrice
+
+        // return the new object, updatedShoppingCart
+        return updatedShoppingCart
+        
+    } catch (error) {
+
+        // propogate the error to the router file
+        throw error
+        
+    }
+}
+
 // a function that will take in shopping cart data and create a new data entry based on that data
 const createShoppingCart = async (shoppingCartData) => {
 
@@ -166,6 +216,5 @@ const clearShoppingCart = async (shoppingCartId) => {
 
 }
 
-
 // export controller functions
-module.exports = { addItemToCart, createShoppingCart, removeItemFromCart, clearShoppingCart }
+module.exports = { getShoppingCartById, addItemToCart, createShoppingCart, removeItemFromCart, clearShoppingCart }
